@@ -72,7 +72,7 @@ function AddNote({ onClick, type, data }) {
           <p className="text-red-500 bg-red-100 p-2 rounded-md">{error}</p>
         )}
         {/* Submit Button */}
-        <button className="bg-blue-500 text-white cursor-pointer hover:bg-blue-700 rounded-lg px-4 py-3">
+        <button className="bg-blue-500 text-white cursor-pointer hover:bg-blue-700 rounded-lg p-4">
           {isCreating
             ? "Loading..."
             : type === "edit"

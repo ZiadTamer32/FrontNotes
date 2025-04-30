@@ -36,7 +36,7 @@ function TagInput({ tag, setTag }) {
           placeholder="Tags"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          className="bg-gray-200 p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg flex-1"
+          className="bg-gray-200 p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg flex-1 w-full"
         />
         <button
           onClick={(e) => {

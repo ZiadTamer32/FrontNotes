@@ -34,7 +34,7 @@ function SignUp() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-5 md:px-0 bg-teal-100">
+    <div className="flex items-center justify-center min-h-screen px-5 md:px-0 bg-[#edf3f3]">
       <div className="w-full max-w-sm border p-4 md:p-8 space-y-3 border-gray-200 md:shadow-md bg-white">
         <h1 className="text-2xl font-bold">Sign Up</h1>
         <form className="space-y-4" onSubmit={handleSignUp}>
