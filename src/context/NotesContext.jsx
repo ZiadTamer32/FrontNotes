@@ -10,13 +10,14 @@ function NotesProvider({ children }) {
   const [allNotes, setAllNotes] = useState(null);
   const [isGetting, setIsGetting] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  const [query, setQuery] = useState("");
   const token = localStorage.getItem("token");
   // GET All Notes
   const getAllNotes = async () => {
     try {
       setIsGetting(true);
       const response = await axios.get(
-        "https://notesapi-ebon.vercel.app/notes",
+        `https://notesapi-ebon.vercel.app/notes?keyword=${query}`,
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -123,6 +124,8 @@ function NotesProvider({ children }) {
         isCreating,
         allNotes,
         setAllNotes,
+        query,
+        setQuery,
         getAllNotes,
         createNote,
         deleteNote,

@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { useNotes } from "../context/NotesContext";
 import Modal from "../components/Modal";
 import NoteCard from "../components/NoteCard";
 import AddNote from "../components/AddNote";
 import Navbar from "../components/Navbar";
-import Spinner from "../components/Spinner";
+import SpinnerMini from "../components/SpinnerMini";
 
 function Home() {
-  const { allNotes, deleteNote, isGetting } = useNotes();
+  const { allNotes, deleteNote, isGetting, getAllNotes, query } = useNotes();
 
   const [isModalOpen, setIsModalOpen] = useState({
     isOpen: false,
@@ -16,43 +16,62 @@ function Home() {
     type: null
   });
 
+  // ✅ Debounce effect
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      getAllNotes();
+    }, 750);
+
+    return () => clearTimeout(delayDebounce);
+  }, [query]);
+
   const handleCloseModal = () => {
     setIsModalOpen({ isOpen: false, data: null, type: null });
   };
 
-  if (isGetting) return <Spinner />;
+  const renderContent = () => {
+    if (isGetting) {
+      return (
+        <div className="w-full min-h-[50vh] flex items-center justify-center col-span-full">
+          <SpinnerMini />
+        </div>
+      );
+    }
+
+    if (allNotes?.length === 0) {
+      return (
+        <div className="w-full min-h-[50vh] flex items-center justify-center col-span-full">
+          <h1 className="text-2xl text-gray-600 font-bold">No notes found</h1>
+        </div>
+      );
+    }
+
+    return allNotes?.map((note) => (
+      <NoteCard
+        key={note._id}
+        title={note.title}
+        date={note.date}
+        content={note.description}
+        isPinned={note.isPinned}
+        tags={note.tags}
+        onEdit={() =>
+          setIsModalOpen({
+            isOpen: true,
+            data: note,
+            type: "edit"
+          })
+        }
+        onDelete={() => deleteNote(note._id)}
+        onPin={() => {}}
+      />
+    ));
+  };
 
   return (
     <>
       <Navbar />
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 p-4">
-        {allNotes?.length > 0 ? (
-          allNotes?.map((note, index) => (
-            <NoteCard
-              key={index}
-              title={note.title}
-              date={note.date}
-              content={note.description}
-              isPinned={note.isPinned}
-              tags={note.tags}
-              onEdit={() => {
-                setIsModalOpen({
-                  isOpen: true,
-                  data: note,
-                  type: "edit"
-                });
-              }}
-              onDelete={() => {
-                deleteNote(note._id);
-              }}
-              onPin={() => {}}
-            />
-          ))
-        ) : (
-          <div className="w-full min-h-[calc(100vh-100px)] flex items-center justify-center col-span-full">
-            <h1 className="text-2xl text-gray-600 font-bold">No notes found</h1>
-          </div>
-        )}
+        {renderContent()}
       </div>
 
       <button

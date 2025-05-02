@@ -14,10 +14,13 @@ function Navbar() {
   };
 
   return (
-    <nav className="py-2 px-6 border-b border-gray-200 bg-white shadow-sm">
-      <div className="flex items-center justify-between gap-4">
+    <nav className="py-2 px-4 border-b border-gray-200 bg-white shadow-sm">
+      <div className="flex items-center flex-wrap justify-between gap-4">
         {/* Title */}
         <h1 className="text-2xl font-bold">Notes</h1>
+        <div className="flex-1 py-2">
+          <Searchbar />
+        </div>
         {/* Profile */}
         <div className="gap-3 flex">
           <div className="w-12 h-12 text-gray-600 bg-gray-200 rounded-full flex items-center justify-center">
