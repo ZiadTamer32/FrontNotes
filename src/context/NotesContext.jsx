@@ -24,7 +24,10 @@ function NotesProvider({ children }) {
           }
         }
       );
-      setAllNotes(response.data.notes);
+      const sortNotes = response.data.notes.sort((a, b) => {
+        return Number(b.isPinned) - Number(a.isPinned);
+      });
+      setAllNotes(sortNotes);
     } catch (err) {
       toast.error(
         err?.response?.data?.errors?.[0]?.msg || "Something went wrong."
@@ -117,6 +120,40 @@ function NotesProvider({ children }) {
     }
   };
 
+  // isPinned Update Note
+  const updateIsPinned = async (id, isPinned) => {
+    try {
+      setIsCreating(true);
+      const response = await axios.put(
+        `https://notesapi-ebon.vercel.app/notes/${id}/isPinned`,
+        {
+          isPinned
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      setAllNotes(
+        allNotes.map((note) => (note._id === id ? response.data.note : note))
+      );
+      if (isPinned) {
+        toast.success("Note pinned successfully");
+      } else {
+        toast.success("Note unpinned successfully");
+      }
+      return true;
+    } catch (err) {
+      toast.error(
+        err?.response?.data?.errors?.[0]?.msg || "Something went wrong."
+      );
+      return false;
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
   return (
     <notesContext.Provider
       value={{
@@ -129,7 +166,8 @@ function NotesProvider({ children }) {
         getAllNotes,
         createNote,
         deleteNote,
-        updateNote
+        updateNote,
+        updateIsPinned
       }}
     >
       {children}

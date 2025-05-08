@@ -8,7 +8,14 @@ import Navbar from "../components/Navbar";
 import SpinnerMini from "../components/SpinnerMini";
 
 function Home() {
-  const { allNotes, deleteNote, isGetting, getAllNotes, query } = useNotes();
+  const {
+    allNotes,
+    deleteNote,
+    isGetting,
+    getAllNotes,
+    updateIsPinned,
+    query
+  } = useNotes();
 
   const [isModalOpen, setIsModalOpen] = useState({
     isOpen: false,
@@ -16,6 +23,10 @@ function Home() {
     type: null
   });
 
+  const handleTogglePin = async (id, isPinned) => {
+    const success = await updateIsPinned(id, isPinned);
+    if (success) await getAllNotes();
+  };
   // ✅ Debounce effect
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -62,7 +73,9 @@ function Home() {
           })
         }
         onDelete={() => deleteNote(note._id)}
-        onPin={() => {}}
+        onPin={() => {
+          handleTogglePin(note._id, !note.isPinned);
+        }}
       />
     ));
   };
